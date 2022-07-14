@@ -13,14 +13,22 @@ use Google_Service_Drive_DriveFile;
 use App\Service\FileUploader;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class MainController extends AbstractController
 {
     /**
-     * @Route("/", name="main")
+     * @Route("/form", name="main")
      */
-    public function index()
+    public function index(AuthenticationUtils $authenticationUtils)
     {
-        return $this->render('main/index.html.twig');
+      /*if (!$this->getUser()) {
+             return $this->redirectToRoute('app_login');
+       }*/
+      $error = $authenticationUtils->getLastAuthenticationError();
+      // last username entered by the user
+      $lastUsername = $authenticationUtils->getLastUsername();
+      return $this->render('main/index.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+      
     }
 
     /**
